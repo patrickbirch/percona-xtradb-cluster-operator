@@ -65,9 +65,10 @@ kubectl delete pods --grace-period=0 --force $initial_primary
 run_mysql \
     'INSERT myApp.myApp (id) VALUES (100502)' \
     "-h $cluster-proxysql -uroot -proot_password"
-wait_for_running "$cluster-pxc" 3
+sleep 10
 changed_primary=$(get_proxy_primary "-h127.0.0.1 -P6032 -uproxyadmin -padmin_password" "$cluster-proxysql-0")
 [ "$initial_primary" != "$changed_primary" ]
+wait_for_running "$cluster-pxc" 3
 compare_mysql_cmd "select-3" "SELECT * from myApp.myApp;" "-h $cluster-pxc-0.$cluster-pxc -uroot -proot_password"
 compare_mysql_cmd "select-3" "SELECT * from myApp.myApp;" "-h $cluster-pxc-1.$cluster-pxc -uroot -proot_password"
 compare_mysql_cmd "select-3" "SELECT * from myApp.myApp;" "-h $cluster-pxc-2.$cluster-pxc -uroot -proot_password"
