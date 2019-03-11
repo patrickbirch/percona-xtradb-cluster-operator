@@ -5,8 +5,8 @@ metadata:
   labels:
     app: pxc
     cluster: no-proxysql
-    component: no-proxysql-pxc-nodes
-  name: no-proxysql-pxc-node
+    component: no-proxysql-pxc
+  name: no-proxysql-pxc
   ownerReferences:
   - apiVersion: pxc.percona.com/v1alpha1
     controller: true
@@ -20,14 +20,14 @@ spec:
     matchLabels:
       app: pxc
       cluster: no-proxysql
-      component: no-proxysql-pxc-nodes
-  serviceName: no-proxysql-pxc-nodes
+      component: no-proxysql-pxc
+  serviceName: no-proxysql-pxc
   template:
     metadata:
       labels:
         app: pxc
         cluster: no-proxysql
-        component: no-proxysql-pxc-nodes
+        component: no-proxysql-pxc
     spec:
       containers:
       - env:
@@ -61,7 +61,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
-        name: node
+        name: pxc
         ports:
         - containerPort: 3306
           name: mysql
@@ -96,7 +96,7 @@ spec:
       volumes:
       - configMap:
           defaultMode: 420
-          name: no-proxysql-pxc-nodes
+          name: no-proxysql-pxc
           optional: true
         name: config-volume
   updateStrategy:
@@ -111,6 +111,6 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 6Gi
+          storage: 1Gi
     status:
       phase: Pending
